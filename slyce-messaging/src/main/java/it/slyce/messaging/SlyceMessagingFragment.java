@@ -12,8 +12,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -51,8 +49,6 @@ import it.slyce.messaging.utils.ScrollUtils;
 import it.slyce.messaging.utils.asyncTasks.AddNewMessageTask;
 import it.slyce.messaging.utils.asyncTasks.ReplaceMessagesTask;
 import it.slyce.messaging.view.ViewUtils;
-
-
 
 /**
  * Created by John C. Hunchar on 1/12/16.
@@ -216,6 +212,12 @@ public class SlyceMessagingFragment extends Fragment implements OnClickListener 
                     }
                 }
         );
+
+        // Trying to fix weird scrolling issue that occurs when notifyItemChanged called to update timestamps.
+        // https://code.google.com/p/android/issues/detail?id=203574
+        mRecyclerView.setHasFixedSize(true);                    // Fixes redraw resize issue that was forcing a scroll position change.
+        mRecyclerView.getItemAnimator().setChangeDuration(0);   // Removes flicker happening on with notifyItemChanged redraw.
+        mRecyclerView.getItemAnimator().setAddDuration(1000);
 
         startUpdateTimestampsThread();
         startHereWhenUpdate = 0;

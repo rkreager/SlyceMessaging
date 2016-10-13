@@ -77,6 +77,6 @@ public class DateUtils {
     }
 
     public static boolean dateNeedsUpdated(long time, String date) {
-        return date == null || date.equals(getTimestamp(time));
+        return date == null || !date.equals(getTimestamp(time));
     }
 }
