@@ -68,12 +68,14 @@ public class MainActivity extends AppCompatActivity {
             message.setUserId("MP");
             message.setSource(MessageSource.LOCAL_USER);
         }
+
         return message;
     }
 
     SlyceMessagingFragment slyceMessagingFragment;
 
     private boolean hasLoadedMore;
+    private int newCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onUserSendsTextMessage(String text) {
                 Log.d("inf", "******************************** " + text);
+            }
+
+            @Override
+            public void onUserSendsTextMessage(TextMessage message) {
+
             }
 
             @Override
@@ -126,10 +133,13 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
+
+
+        final ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
         scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
+                n++;
                 TextMessage textMessage = new TextMessage();
                 textMessage.setText("Another message...");
                 textMessage.setAvatarUrl("https://lh3.googleusercontent.com/-Y86IN-vEObo/AAAAAAAAAAI/AAAAAAAKyAM/6bec6LqLXXA/s0-c-k-no-ns/photo.jpg");
@@ -138,6 +148,11 @@ public class MainActivity extends AppCompatActivity {
                 textMessage.setDate(new Date().getTime());
                 textMessage.setSource(MessageSource.EXTERNAL_USER);
                 slyceMessagingFragment.addNewMessage(textMessage);
+
+                newCount++;
+                if (newCount > 2) {
+                    scheduleTaskExecutor.shutdown();
+                }
             }
         }, 3, 3, TimeUnit.SECONDS);
     }

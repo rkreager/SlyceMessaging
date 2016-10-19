@@ -64,4 +64,28 @@ public abstract class Message {
     }
 
     public abstract MessageItem toMessageItem(Context context);
+
+    /**
+     * Auto generated equals and hash, based on selected properties
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Message message = (Message) o;
+
+        if (date != message.date) return false;
+        if (!displayName.equals(message.displayName)) return false;
+        return userId.equals(message.userId);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (date ^ (date >>> 32));
+        result = 31 * result + displayName.hashCode();
+        result = 31 * result + userId.hashCode();
+        return result;
+    }
 }

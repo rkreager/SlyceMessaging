@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import it.slyce.messaging.R;
+import it.slyce.messaging.message.Message;
 import it.slyce.messaging.message.messageItem.externalUser.media.MessageExternalUserMediaViewHolder;
 import it.slyce.messaging.message.messageItem.externalUser.text.MessageExternalUserTextViewHolder;
 import it.slyce.messaging.message.messageItem.internalUser.media.MessageInternalUserViewHolder;
@@ -124,5 +125,15 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
     public void updateMessageItemDataList(List<MessageItem> messageItems) {
         mMessageItems = messageItems;
         notifyDataSetChanged();
+    }
+
+    public void removeMessage(Message message) {
+        for (int i=0; i < mMessageItems.size(); i++) {
+            if (message.equals(mMessageItems.get(i).message)) {
+                mMessageItems.remove(i);
+                notifyItemRemoved(i);
+                notifyItemRangeChanged(i, mMessageItems.size());
+            }
+        }
     }
 }

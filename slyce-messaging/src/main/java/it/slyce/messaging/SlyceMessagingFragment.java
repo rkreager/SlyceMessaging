@@ -158,6 +158,14 @@ public class SlyceMessagingFragment extends Fragment implements OnClickListener 
         addNewMessages(messages);
     }
 
+    public void removeMessage(Message message) {
+        mRecyclerAdapter.removeMessage(message);
+    }
+
+    public int getMessageCount() {
+        return mRecyclerAdapter.getItemCount();
+    }
+
     public void setOnSendMessageListener(UserSendsMessageListener listener) {
         this.listener = listener;
     }
@@ -444,7 +452,10 @@ public class SlyceMessagingFragment extends Fragment implements OnClickListener 
         addNewMessage(message);
 
         ScrollUtils.scrollToBottomAfterDelay(mRecyclerView, mRecyclerAdapter);
-        if (listener != null)
+        if (listener != null) {
             listener.onUserSendsTextMessage(message.getText());
+            listener.onUserSendsTextMessage(message);
+        }
+
     }
 }
