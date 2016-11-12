@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import it.slyce.messaging.R;
@@ -124,6 +126,25 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
 
     public void updateMessageItemDataList(List<MessageItem> messageItems) {
         mMessageItems = messageItems;
+        notifyDataSetChanged();
+    }
+
+    public void sortListByDateAndNotify() {
+        Collections.sort(mMessageItems, new Comparator<MessageItem>() {
+            @Override
+            public int compare(MessageItem o1, MessageItem o2) {
+                long aDate = o1.getMessage().getDate();
+                long bDate = o2.getMessage().getDate();
+                if (aDate < bDate) {
+                    return -1;
+                } else if (aDate <= bDate) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            }
+        });
+
         notifyDataSetChanged();
     }
 

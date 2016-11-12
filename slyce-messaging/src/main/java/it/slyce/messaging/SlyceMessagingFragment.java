@@ -147,15 +147,20 @@ public class SlyceMessagingFragment extends Fragment implements OnClickListener 
         this.customSettings.snackbarTitleColor = ta.getColor(R.styleable.SlyceMessagingTheme_snackbarTitleColor, Color.WHITE);
     }
 
-    public void addNewMessages(List<Message> messages) {
+    public void addNewMessages(List<Message> messages, String snackbarString) {
         mMessages.addAll(messages);
-        new AddNewMessageTask(messages, mMessageItems, mRecyclerAdapter, mRecyclerView, getActivity().getApplicationContext(), customSettings).execute();
+        new AddNewMessageTask(messages, snackbarString, mMessageItems, mRecyclerAdapter, mRecyclerView, getActivity().getApplicationContext(), customSettings, true).execute();
+    }
+
+    public void addPreviousMessages(List<Message> messages, String snackbarString) {
+        mMessages.addAll(0, messages);
+        new AddNewMessageTask(messages, snackbarString, mMessageItems, mRecyclerAdapter, mRecyclerView, getActivity().getApplicationContext(), customSettings, false).execute();
     }
 
     public void addNewMessage(Message message) {
         List<Message> messages = new ArrayList<>();
         messages.add(message);
-        addNewMessages(messages);
+        addNewMessages(messages, "New message");
     }
 
     public void removeMessage(Message message) {
