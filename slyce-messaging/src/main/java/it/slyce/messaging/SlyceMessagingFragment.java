@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -167,6 +168,10 @@ public class SlyceMessagingFragment extends Fragment implements OnClickListener 
         mRecyclerAdapter.removeMessage(message);
     }
 
+    public void setMessageListener(Message message, int itemPosition, String defaultAvatarUrl, OnClickListener listener) {
+        mRecyclerAdapter.setMessageListener(message, itemPosition, defaultAvatarUrl, listener);
+    }
+
     public int getMessageCount() {
         return mRecyclerAdapter.getItemCount();
     }
@@ -197,7 +202,7 @@ public class SlyceMessagingFragment extends Fragment implements OnClickListener 
         // Init variables for recycler view
         mMessages = new ArrayList<>();
         mMessageItems = new ArrayList<>();
-        mRecyclerAdapter = new MessageRecyclerAdapter(mMessageItems, customSettings);
+        mRecyclerAdapter = new MessageRecyclerAdapter(getActivity(), mMessageItems, customSettings);
         mLinearLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext()){
             @Override
             public boolean canScrollVertically() {
@@ -225,6 +230,20 @@ public class SlyceMessagingFragment extends Fragment implements OnClickListener 
                     }
                 }
         );
+
+        // Ensure that screen scrolls to bottom after EditText is clicked
+        mEntryField.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ScrollUtils.scrollToBottomAfterDelay(mRecyclerView, mRecyclerAdapter);
+                    }
+                }, 500);
+            }
+        });
 
         // Trying to fix weird scrolling issue that occurs when notifyItemChanged called to update timestamps.
         // https://code.google.com/p/android/issues/detail?id=203574

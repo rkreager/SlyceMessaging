@@ -1,10 +1,14 @@
 package it.slyce.messaging.message.messageItem;
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -25,19 +29,28 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
 
     private static final String TAG = MessageRecyclerAdapter.class.getName();
 
+    private MessageViewHolder viewHolder;
+
     private List<MessageItem> mMessageItems;
 
     private CustomSettings customSettings;
 
-    public MessageRecyclerAdapter(List<MessageItem> messageItems, CustomSettings customSettings) {
+    private List<Integer> itemPositions = new ArrayList<>();
+
+    private View.OnClickListener listener;
+
+    private Context context;
+
+    public MessageRecyclerAdapter(Context context, List<MessageItem> messageItems, CustomSettings customSettings) {
         mMessageItems = messageItems;
+        this.context = context;
         this.customSettings = customSettings;
     }
 
     @Override
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        MessageViewHolder viewHolder = null;
+        viewHolder = null;
 
         MessageItemType messageItemType = MessageItemType.values()[viewType];
         switch (messageItemType) {
@@ -78,10 +91,29 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
             return;
         }
 
+        FrameLayout localFrameLayout = (FrameLayout) messageViewHolder.itemView.findViewById(R.id.message_user_text_view_group_bubble);
+        if (localFrameLayout != null) {
+            localFrameLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_rounded_rectangle_gray));
+        }
+
+        FrameLayout externalFrameLayout = (FrameLayout) messageViewHolder.itemView.findViewById(R.id.message_scout_text_view_group_bubble);
+        if (externalFrameLayout != null) {
+            externalFrameLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_rounded_rectangle_white));
+        }
+
         // Build the item
         MessageItem messageItem = getMessageItemByPosition(position);
         if (messageItem != null) {
             messageItem.buildMessageItem(messageViewHolder);
+        }
+
+        for (int itemPosition : itemPositions) {
+            if (position == itemPosition) {
+                localFrameLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_rounded_rectangle_error));
+                localFrameLayout.setOnClickListener(listener);
+                messageViewHolder.avatar.setOnClickListener(listener);
+                messageViewHolder.itemView.setOnClickListener(listener);
+            }
         }
     }
 
@@ -157,4 +189,11 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
             }
         }
     }
+
+    public void setMessageListener(Message message, int itemPosition, String avatarUrl, final View.OnClickListener listener) {
+        message.setAvatarUrl(avatarUrl);
+        itemPositions.add(itemPosition);
+        this.listener = listener;
+    }
+
 }
