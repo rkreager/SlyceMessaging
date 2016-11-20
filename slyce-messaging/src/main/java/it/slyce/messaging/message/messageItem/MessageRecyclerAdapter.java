@@ -91,11 +91,6 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
             return;
         }
 
-        FrameLayout localFrameLayout = (FrameLayout) messageViewHolder.itemView.findViewById(R.id.message_user_text_view_group_bubble);
-        if (localFrameLayout != null) {
-            localFrameLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_rounded_rectangle_gray));
-        }
-
         FrameLayout externalFrameLayout = (FrameLayout) messageViewHolder.itemView.findViewById(R.id.message_scout_text_view_group_bubble);
         if (externalFrameLayout != null) {
             externalFrameLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_rounded_rectangle_white));
@@ -107,12 +102,16 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
             messageItem.buildMessageItem(messageViewHolder);
         }
 
-        for (int itemPosition : itemPositions) {
-            if (position == itemPosition) {
-                localFrameLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_rounded_rectangle_error));
-                localFrameLayout.setOnClickListener(listener);
-                messageViewHolder.avatar.setOnClickListener(listener);
-                messageViewHolder.itemView.setOnClickListener(listener);
+        FrameLayout localFrameLayout = (FrameLayout) messageViewHolder.itemView.findViewById(R.id.message_user_text_view_group_bubble);
+        if (localFrameLayout != null) {
+            localFrameLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_rounded_rectangle_gray));
+            for (int itemPosition : itemPositions) {
+                if (position == itemPosition) {
+                    localFrameLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_rounded_rectangle_error));
+                    localFrameLayout.setOnClickListener(listener);
+                    messageViewHolder.avatar.setOnClickListener(listener);
+                    messageViewHolder.itemView.setOnClickListener(listener);
+                }
             }
         }
     }
