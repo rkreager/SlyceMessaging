@@ -35,9 +35,7 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
 
     private CustomSettings customSettings;
 
-    private List<Integer> itemPositions = new ArrayList<>();
-
-    private View.OnClickListener listener;
+    private List<Boolean> failures = new ArrayList<>();
 
     private Context context;
 
@@ -105,13 +103,8 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
         FrameLayout localFrameLayout = (FrameLayout) messageViewHolder.itemView.findViewById(R.id.message_user_text_view_group_bubble);
         if (localFrameLayout != null) {
             localFrameLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_rounded_rectangle_gray));
-            for (int itemPosition : itemPositions) {
-                if (position == itemPosition) {
-                    localFrameLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_rounded_rectangle_error));
-                    localFrameLayout.setOnClickListener(listener);
-                    messageViewHolder.avatar.setOnClickListener(listener);
-                    messageViewHolder.itemView.setOnClickListener(listener);
-                }
+            if (failures.get(position)) {
+                localFrameLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_rounded_rectangle_error));
             }
         }
     }
@@ -189,10 +182,8 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
         }
     }
 
-    public void setMessageListener(Message message, int itemPosition, String avatarUrl, final View.OnClickListener listener) {
-        message.setAvatarUrl(avatarUrl);
-        itemPositions.add(itemPosition);
-        this.listener = listener;
+    public void setMessageStyle(Message message, boolean failure) {
+        failures.add(failure);
     }
 
 }

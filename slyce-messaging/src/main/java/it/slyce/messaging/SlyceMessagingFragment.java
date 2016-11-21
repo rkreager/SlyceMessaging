@@ -168,8 +168,8 @@ public class SlyceMessagingFragment extends Fragment implements OnClickListener 
         mRecyclerAdapter.removeMessage(message);
     }
 
-    public void setMessageListener(Message message, int itemPosition, String defaultAvatarUrl, OnClickListener listener) {
-        mRecyclerAdapter.setMessageListener(message, itemPosition, defaultAvatarUrl, listener);
+    public void setMessageStyle(Message message, boolean failure) {
+        mRecyclerAdapter.setMessageStyle(message, failure);
     }
 
     public int getMessageCount() {
