@@ -168,9 +168,13 @@ public class SlyceMessagingFragment extends Fragment implements OnClickListener 
         mRecyclerAdapter.removeMessage(message);
     }
 
-    public void setMessageStyle(Message message, boolean failure) {
-        mRecyclerAdapter.setMessageStyle(message, failure);
+    public void setMessageStyle(int drawableId) {
+        mRecyclerAdapter.setMessageStyle(drawableId);
     }
+
+    /*public void resetFailures(List<Boolean> didFails) {
+        mRecyclerAdapter.resetFailures(didFails);
+    }*/
 
     public int getMessageCount() {
         return mRecyclerAdapter.getItemCount();

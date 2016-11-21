@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -35,7 +34,7 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
 
     private CustomSettings customSettings;
 
-    private List<Boolean> failures = new ArrayList<>();
+    private int drawableId;
 
     private Context context;
 
@@ -102,10 +101,7 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
 
         FrameLayout localFrameLayout = (FrameLayout) messageViewHolder.itemView.findViewById(R.id.message_user_text_view_group_bubble);
         if (localFrameLayout != null) {
-            localFrameLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_rounded_rectangle_gray));
-            if (failures.get(position)) {
-                localFrameLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_rounded_rectangle_error));
-            }
+            localFrameLayout.setBackground(ContextCompat.getDrawable(context, drawableId));
         }
     }
 
@@ -182,8 +178,7 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
         }
     }
 
-    public void setMessageStyle(Message message, boolean failure) {
-        failures.add(failure);
+    public void setMessageStyle(int drawableId) {
+        this.drawableId = drawableId;
     }
-
 }
