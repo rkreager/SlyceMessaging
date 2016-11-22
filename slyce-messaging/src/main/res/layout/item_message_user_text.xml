@@ -57,7 +57,9 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/message_user_text_view_group_avatar"
         android:background="@drawable/shape_rounded_rectangle_gray"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginStart="48dp">
 
         <it.slyce.messaging.view.text.FontTextView
             android:id="@+id/message_user_text_text_view_text"

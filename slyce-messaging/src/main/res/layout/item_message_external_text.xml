@@ -60,7 +60,9 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/message_scout_text_image_view_avatar_group"
         android:background="@drawable/shape_rounded_rectangle_white"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginEnd="48dp">
 
         <it.slyce.messaging.view.text.FontTextView
             android:id="@+id/message_scout_text_text_view_text"
