@@ -70,7 +70,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:autoLink="web"
             android:gravity="left"
             android:textColor="@color/text_navy"
             android:textSize="14sp"

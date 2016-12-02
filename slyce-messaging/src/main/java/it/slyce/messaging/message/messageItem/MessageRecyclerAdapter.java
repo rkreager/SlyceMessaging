@@ -1,5 +1,6 @@
 package it.slyce.messaging.message.messageItem;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -38,10 +39,16 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
 
     private Context context;
 
+    private Activity activity;
+
     public MessageRecyclerAdapter(Context context, List<MessageItem> messageItems, CustomSettings customSettings) {
         mMessageItems = messageItems;
         this.context = context;
         this.customSettings = customSettings;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
 
     @Override
@@ -96,13 +103,13 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
         // Build the item
         MessageItem messageItem = getMessageItemByPosition(position);
         if (messageItem != null) {
-            messageItem.buildMessageItem(messageViewHolder);
+            messageItem.buildMessageItem(messageViewHolder, activity);
         }
 
-        FrameLayout localFrameLayout = (FrameLayout) messageViewHolder.itemView.findViewById(R.id.message_user_text_view_group_bubble);
-        if (localFrameLayout != null) {
-            localFrameLayout.setBackground(ContextCompat.getDrawable(context, drawableId));
-        }
+//        FrameLayout localFrameLayout = (FrameLayout) messageViewHolder.itemView.findViewById(R.id.message_user_text_view_group_bubble);
+//        if (localFrameLayout != null) {
+//            localFrameLayout.setBackground(ContextCompat.getDrawable(context, drawableId));
+//        }
     }
 
     @Override
@@ -176,9 +183,5 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
                 notifyItemRangeChanged(i, mMessageItems.size());
             }
         }
-    }
-
-    public void setMessageStyle(int drawableId) {
-        this.drawableId = drawableId;
     }
 }

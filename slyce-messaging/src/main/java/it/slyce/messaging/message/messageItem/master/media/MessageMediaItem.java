@@ -1,5 +1,6 @@
 package it.slyce.messaging.message.messageItem.master.media;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -29,7 +30,7 @@ public abstract class MessageMediaItem extends MessageItem {
 
     @Override
     public void buildMessageItem(
-            MessageViewHolder messageViewHolder) {
+            MessageViewHolder messageViewHolder, Activity activity) {
 
         if (message != null &&  messageViewHolder != null && messageViewHolder instanceof MessageMediaViewHolder) {
 
@@ -40,6 +41,7 @@ public abstract class MessageMediaItem extends MessageItem {
             date = DateUtils.getTimestamp(message.getDate());
             final String mediaUrl = getMediaMessage().getUrl();
             this.avatarUrl = message.getAvatarUrl();
+            this.messageId = message.getMessageId();
 
             // Populate views with content
             messageMediaViewHolder.timestamp.setText(date != null ? date : "");
@@ -57,7 +59,7 @@ public abstract class MessageMediaItem extends MessageItem {
                     @Override
                     public void onClick(View view) {
                     if (messageMediaViewHolder.customSettings.userClicksAvatarPictureListener != null)
-                        messageMediaViewHolder.customSettings.userClicksAvatarPictureListener.userClicksAvatarPhoto(message.getUserId());
+                        messageMediaViewHolder.customSettings.userClicksAvatarPictureListener.userClicksAvatarPhoto(message.getUserId(), messageId);
                 }
             });
 

@@ -14,6 +14,8 @@ public abstract class Message {
     String displayName;
     String userId;
     String initials;
+    String messageId;
+    int bubbleDrawableId;
 
     public long getDate() {
         return date;
@@ -61,6 +63,22 @@ public abstract class Message {
 
     public void setInitials(String initials) {
         this.initials = initials;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
+
+    public Integer getBubbleDrawableId() {
+        return bubbleDrawableId;
+    }
+
+    public void setBubbleDrawableId(int bubbleDrawableId) {
+        this.bubbleDrawableId = bubbleDrawableId;
     }
 
     public abstract MessageItem toMessageItem(Context context);

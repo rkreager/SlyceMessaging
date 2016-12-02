@@ -62,7 +62,7 @@ public class SlyceMessagingFragment extends Fragment implements OnClickListener 
     private LinearLayoutManager mLinearLayoutManager;
     private List<Message> mMessages;
     private List<MessageItem> mMessageItems;
-    private MessageRecyclerAdapter mRecyclerAdapter;
+    public MessageRecyclerAdapter mRecyclerAdapter;
     private RecyclerView mRecyclerView;
     private View rootView;
 
@@ -166,10 +166,6 @@ public class SlyceMessagingFragment extends Fragment implements OnClickListener 
 
     public void removeMessage(Message message) {
         mRecyclerAdapter.removeMessage(message);
-    }
-
-    public void setMessageStyle(int drawableId) {
-        mRecyclerAdapter.setMessageStyle(drawableId);
     }
 
     /*public void resetFailures(List<Boolean> didFails) {

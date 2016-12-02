@@ -1,6 +1,6 @@
 package it.slyce.messaging.message.messageItem.spinner;
 
-import android.view.View;
+import android.app.Activity;
 
 import it.slyce.messaging.message.MessageSource;
 import it.slyce.messaging.message.messageItem.MessageItem;
@@ -16,7 +16,7 @@ public class SpinnerItem extends MessageItem {
     }
 
     @Override
-    public void buildMessageItem(MessageViewHolder messageViewHolder) {
+    public void buildMessageItem(MessageViewHolder messageViewHolder, Activity activity) {
 
     }
 

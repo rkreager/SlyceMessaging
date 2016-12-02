@@ -19,6 +19,7 @@ import it.slyce.messaging.message.MediaMessage;
 import it.slyce.messaging.message.Message;
 import it.slyce.messaging.message.MessageSource;
 import it.slyce.messaging.message.TextMessage;
+import it.slyce.messaging.message.messageItem.MessageRecyclerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private volatile static int n = 0;
+
+    private MessageRecyclerAdapter messageRecyclerAdapter;
 
     private static Message getRandomMessage() {
         n++;
@@ -85,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         hasLoadedMore = false;
 
         slyceMessagingFragment = (SlyceMessagingFragment) getFragmentManager().findFragmentById(R.id.fragment_for_slyce_messaging);
+        slyceMessagingFragment.mRecyclerAdapter.setActivity(new MainActivity());
         slyceMessagingFragment.setDefaultAvatarUrl("https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/10989174_799389040149643_722795835011402620_n.jpg?oh=bff552835c414974cc446043ac3c70ca&oe=580717A5");
         slyceMessagingFragment.setDefaultDisplayName("Matthew Page");
         slyceMessagingFragment.setDefaultUserId("uhtnaeohnuoenhaeuonthhntouaetnheuontheuo");
@@ -141,7 +145,11 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 n++;
                 TextMessage textMessage = new TextMessage();
-                textMessage.setText("Another message...");
+                if (n % 2 == 0) {
+                    textMessage.setText("league://sth we will try www.google.com and then http://www.yahoo.com");
+                } else {
+                    textMessage.setText("hello www.google.com");
+                }
                 textMessage.setAvatarUrl("https://lh3.googleusercontent.com/-Y86IN-vEObo/AAAAAAAAAAI/AAAAAAAKyAM/6bec6LqLXXA/s0-c-k-no-ns/photo.jpg");
                 textMessage.setDisplayName("Gary Johnson");
                 textMessage.setUserId("LP");

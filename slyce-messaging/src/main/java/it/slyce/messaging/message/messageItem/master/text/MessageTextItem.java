@@ -1,8 +1,11 @@
 package it.slyce.messaging.message.messageItem.master.text;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,19 +13,21 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.regex.Pattern;
+
 import it.slyce.messaging.message.MessageSource;
 import it.slyce.messaging.message.TextMessage;
-import it.slyce.messaging.utils.DateUtils;
 import it.slyce.messaging.message.messageItem.MessageItem;
 import it.slyce.messaging.message.messageItem.MessageItemType;
 import it.slyce.messaging.message.messageItem.MessageViewHolder;
+import it.slyce.messaging.utils.DateUtils;
+import it.slyce.messaging.utils.PatternEditableBuilder;
 
 /**
  * Created by matthewpage on 6/27/16.
  */
 public class MessageTextItem extends MessageItem {
     private Context context;
-    private String avatarUrl;
 
     public MessageTextItem(TextMessage textMessage, Context context) {
         super(textMessage);
@@ -31,7 +36,7 @@ public class MessageTextItem extends MessageItem {
 
     @Override
     public void buildMessageItem(
-            MessageViewHolder messageViewHolder) {
+            MessageViewHolder messageViewHolder, final Activity activity) {
 
         if (message != null &&  messageViewHolder != null && messageViewHolder instanceof MessageTextViewHolder) {
             final MessageTextViewHolder messageTextViewHolder = (MessageTextViewHolder) messageViewHolder;
@@ -41,6 +46,7 @@ public class MessageTextItem extends MessageItem {
             String text = ((TextMessage)message).getText();
             this.avatarUrl = message.getAvatarUrl();
             this.initials = message.getInitials();
+            this.messageId = message.getMessageId();
 
             // Populate views with content
             messageTextViewHolder.initials.setText(initials  != null ? initials : "");
@@ -48,6 +54,40 @@ public class MessageTextItem extends MessageItem {
             messageTextViewHolder.timestamp.setText(date != null ? date : "");
             messageTextViewHolder.username.setText(message.getDisplayName() != null ? message.getDisplayName() : "");
 
+            Pattern urlDetect = Pattern.compile("((([A-Za-z]{3,9}:(?:\\/\\/))(?:[\\-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9\\.\\-]+|(?:[a-zA-Z0-9]+\\.[a-zA-Z0-9]+|[\\-;:&=\\+\\$,\\w]+@)[A-Za-z0-9\\.\\-]+)((?:\\/[\\+~%\\/\\.\\w\\-_]*)?\\??(?:[\\-\\+=&;%@\\.\\w_]*)#?(?:[\\.\\!\\/\\\\\\w]*)[A-Za-z0-9\\/\\-]+)?)");
+
+            new PatternEditableBuilder()
+                    .addPattern(urlDetect, 0x7f25DBC9,
+                            new PatternEditableBuilder.SpannableClickedListener() {
+                                @Override
+                                public void onSpanClicked(String text) {
+                                    Uri linkUri = Uri.parse(text);
+                                    String scheme = linkUri.getScheme();
+                                    String fullPath = linkUri.getEncodedSchemeSpecificPart();
+                                    if (scheme == null) {
+                                        linkUri = Uri.parse("http://" + fullPath);
+                                    }
+
+                                    if (scheme != null && scheme.equals("league")) {
+                                        String[] paths = fullPath.split("/");
+                                        String tag = paths[paths.length - 1];
+                                        Intent intent = new Intent(context, activity.getClass());
+                                        intent.putExtra(SLYCE_PRESENTER, "link");
+                                        intent.putExtra(SLYCE_TAG, tag);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        context.startActivity(intent);
+                                    } else {
+                                        Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+                                        urlIntent.setData(linkUri);
+                                        urlIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        context.startActivity(urlIntent);
+                                    }
+                                }
+                            }).into(messageTextViewHolder.text);
+
+            if (message.getBubbleDrawableId() != null) {
+                messageTextViewHolder.customSettings.localBubbleBackgroundColor = message.getBubbleDrawableId();
+            }
 
             messageTextViewHolder.bubble.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -66,8 +106,9 @@ public class MessageTextItem extends MessageItem {
             messageViewHolder.avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (messageTextViewHolder.customSettings.userClicksAvatarPictureListener != null)
-                        messageTextViewHolder.customSettings.userClicksAvatarPictureListener.userClicksAvatarPhoto(message.getUserId());
+                    if (messageTextViewHolder.customSettings.userClicksAvatarPictureListener != null) {
+                        messageTextViewHolder.customSettings.userClicksAvatarPictureListener.userClicksAvatarPhoto(message.getUserId(), messageId);
+                    }
                 }
             });
 

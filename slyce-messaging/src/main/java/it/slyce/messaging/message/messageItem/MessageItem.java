@@ -1,5 +1,7 @@
 package it.slyce.messaging.message.messageItem;
 
+import android.app.Activity;
+
 import it.slyce.messaging.message.Message;
 import it.slyce.messaging.message.MessageSource;
 import it.slyce.messaging.utils.DateUtils;
@@ -16,13 +18,17 @@ public abstract class MessageItem {
     protected String initials;
     protected Message message;
     protected String date;
+    protected String messageId;
+
+    public static String SLYCE_TAG = "SLYCE_TAG";
+    public static String SLYCE_PRESENTER = "SLYCE_PRESENTER";
 
     public MessageItem(Message message) {
         this.message = message;
     }
 
     public abstract void buildMessageItem(
-            MessageViewHolder messageViewHolder);
+            MessageViewHolder messageViewHolder, Activity activity);
 
     public abstract MessageItemType getMessageItemType();
 
