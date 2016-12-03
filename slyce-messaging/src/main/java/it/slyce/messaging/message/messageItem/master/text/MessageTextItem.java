@@ -63,12 +63,15 @@ public class MessageTextItem extends MessageItem {
                                 public void onSpanClicked(String text) {
                                     Uri linkUri = Uri.parse(text);
                                     String scheme = linkUri.getScheme();
-                                    String fullPath = linkUri.getEncodedSchemeSpecificPart();
+                                    final String fullPath = linkUri.getEncodedSchemeSpecificPart();
                                     if (scheme == null) {
                                         linkUri = Uri.parse("http://" + fullPath);
                                     }
 
-                                    if (scheme != null && scheme.equals("league")) {
+                                    if (scheme != null && (!scheme.equals("http")
+                                        || !scheme.equals("https") || !scheme.equals("ftp")
+                                            || !scheme.equals("ftps") || !scheme.equals("rtsp")
+                                    )) {
                                         String[] paths = fullPath.split("/");
                                         String tag = paths[paths.length - 1];
                                         Intent intent = new Intent(context, activity.getClass());
@@ -86,7 +89,7 @@ public class MessageTextItem extends MessageItem {
                             }).into(messageTextViewHolder.text);
 
             if (message.getBubbleDrawableId() != null) {
-                messageTextViewHolder.customSettings.localBubbleBackgroundColor = message.getBubbleDrawableId();
+                messageTextViewHolder.bubble.setBackgroundResource(message.getBubbleDrawableId());
             }
 
             messageTextViewHolder.bubble.setOnLongClickListener(new View.OnLongClickListener() {
@@ -107,7 +110,7 @@ public class MessageTextItem extends MessageItem {
                 @Override
                 public void onClick(View view) {
                     if (messageTextViewHolder.customSettings.userClicksAvatarPictureListener != null) {
-                        messageTextViewHolder.customSettings.userClicksAvatarPictureListener.userClicksAvatarPhoto(message.getUserId(), messageId);
+                        messageTextViewHolder.customSettings.userClicksAvatarPictureListener.userClicksAvatarPhoto(message.getUserId(), message);
                     }
                 }
             });

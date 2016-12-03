@@ -59,7 +59,7 @@ public abstract class MessageMediaItem extends MessageItem {
                     @Override
                     public void onClick(View view) {
                     if (messageMediaViewHolder.customSettings.userClicksAvatarPictureListener != null)
-                        messageMediaViewHolder.customSettings.userClicksAvatarPictureListener.userClicksAvatarPhoto(message.getUserId(), messageId);
+                        messageMediaViewHolder.customSettings.userClicksAvatarPictureListener.userClicksAvatarPhoto(message.getUserId(), message);
                 }
             });
 
